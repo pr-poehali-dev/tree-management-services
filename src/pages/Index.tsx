@@ -684,7 +684,7 @@ export default function Index() {
                 { icon: "MessageCircle", label: "WhatsApp / Telegram", value: "+7 (987) 863-30-80", href: "https://wa.me/79878633080" },
                 { icon: "Mail", label: "Email", value: "aleksei_stenovskii@mail.ru", href: "mailto:aleksei_stenovskii@mail.ru" },
                 { icon: "Clock", label: "Режим работы", value: "Пн–Вс: 08:00–20:00. Аварийный: 24/7", href: null },
-                { icon: "MapPin", label: "Регион работы", value: "Москва и Московская область", href: null },
+                { icon: "MapPin", label: "Регион работы", value: "Кувандык и Оренбургская область", href: null },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-forest-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
