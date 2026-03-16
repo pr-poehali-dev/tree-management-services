@@ -198,9 +198,9 @@ export default function Index() {
           </ul>
 
           <div className="flex items-center gap-3">
-            <a href="tel:+79001234567" className="hidden md:flex items-center gap-2 text-forest-400 hover:text-forest-300 font-medium text-sm transition-colors">
+            <a href="tel:+79878633080" className="hidden md:flex items-center gap-2 text-forest-400 hover:text-forest-300 font-medium text-sm transition-colors">
               <Icon name="Phone" size={16} />
-              +7 (900) 123-45-67
+              +7 (987) 863-30-80
             </a>
             <button
               onClick={() => scrollTo("#contacts")}
@@ -221,8 +221,8 @@ export default function Index() {
                 {l.label}
               </button>
             ))}
-            <a href="tel:+79001234567" className="flex items-center gap-2 mt-4 text-forest-400 font-semibold">
-              <Icon name="Phone" size={16} /> +7 (900) 123-45-67
+            <a href="tel:+79878633080" className="flex items-center gap-2 mt-4 text-forest-400 font-semibold">
+              <Icon name="Phone" size={16} /> +7 (987) 863-30-80
             </a>
           </div>
         )}
@@ -558,8 +558,8 @@ export default function Index() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div className={`space-y-6 ${contactSection.inView ? "animate-slide-in-left" : "opacity-0"}`}>
               {[
-                { icon: "Phone", label: "Телефон", value: "+7 (900) 123-45-67", href: "tel:+79001234567" },
-                { icon: "MessageCircle", label: "WhatsApp / Telegram", value: "+7 (900) 123-45-67", href: "https://wa.me/79001234567" },
+                { icon: "Phone", label: "Телефон", value: "+7 (987) 863-30-80", href: "tel:+79878633080" },
+                { icon: "MessageCircle", label: "WhatsApp / Telegram", value: "+7 (987) 863-30-80", href: "https://wa.me/79878633080" },
                 { icon: "Mail", label: "Email", value: "info@lesmaster.ru", href: "mailto:info@lesmaster.ru" },
                 { icon: "Clock", label: "Режим работы", value: "Пн–Вс: 08:00–20:00. Аварийный: 24/7", href: null },
                 { icon: "MapPin", label: "Регион работы", value: "Москва и Московская область", href: null },
