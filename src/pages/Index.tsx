@@ -560,7 +560,7 @@ export default function Index() {
               {[
                 { icon: "Phone", label: "Телефон", value: "+7 (987) 863-30-80", href: "tel:+79878633080" },
                 { icon: "MessageCircle", label: "WhatsApp / Telegram", value: "+7 (987) 863-30-80", href: "https://wa.me/79878633080" },
-                { icon: "Mail", label: "Email", value: "info@lesmaster.ru", href: "mailto:info@lesmaster.ru" },
+                { icon: "Mail", label: "Email", value: "aleksei_stenovskii@mail.ru", href: "mailto:aleksei_stenovskii@mail.ru" },
                 { icon: "Clock", label: "Режим работы", value: "Пн–Вс: 08:00–20:00. Аварийный: 24/7", href: null },
                 { icon: "MapPin", label: "Регион работы", value: "Москва и Московская область", href: null },
               ].map((item, i) => (
