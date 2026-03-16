@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
+const SEND_EMAIL_URL = "https://functions.poehali.dev/2709ae28-ba47-4add-aca7-6490e4e044bd";
+
 const NAV_LINKS = [
   { label: "Главная", href: "#home" },
   { label: "Услуги", href: "#services" },
@@ -126,6 +128,126 @@ const STATS = [
   { value: "100%", label: "Экологичная утилизация" },
   { value: "24/7", label: "Аварийный выезд" },
 ];
+
+function ContactForm({ inView }: { inView: boolean }) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [service, setService] = useState("");
+  const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    if (!name.trim() || !phone.trim()) {
+      setError("Пожалуйста, укажите имя и телефон");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(SEND_EMAIL_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, service, comment }),
+      });
+      if (res.ok) {
+        setSuccess(true);
+        setName(""); setPhone(""); setService(""); setComment("");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Ошибка отправки. Попробуйте позже.");
+      }
+    } catch {
+      setError("Ошибка сети. Проверьте соединение и попробуйте снова.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className={`bg-stone-950 border border-stone-800 rounded-2xl p-8 ${inView ? "animate-fade-in-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
+      <h3 className="font-oswald text-2xl font-bold text-white mb-6">ОСТАВИТЬ ЗАЯВКУ</h3>
+
+      {success ? (
+        <div className="text-center py-10">
+          <div className="w-16 h-16 bg-forest-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Icon name="CheckCircle" size={36} className="text-forest-400" />
+          </div>
+          <h4 className="font-oswald text-2xl font-bold text-white mb-2">Заявка отправлена!</h4>
+          <p className="text-stone-400 mb-6">Перезвоним вам в течение 15 минут</p>
+          <button onClick={() => setSuccess(false)} className="text-forest-400 hover:text-forest-300 text-sm underline">Отправить ещё одну заявку</button>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="text-stone-400 text-sm mb-2 block">Ваше имя *</label>
+            <input
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="Иван Иванов"
+              className="w-full bg-stone-900 border border-stone-700 focus:border-forest-500 rounded-xl px-4 py-3 text-white placeholder-stone-600 outline-none transition-colors"
+            />
+          </div>
+          <div>
+            <label className="text-stone-400 text-sm mb-2 block">Телефон *</label>
+            <input
+              type="tel"
+              value={phone}
+              onChange={e => setPhone(e.target.value)}
+              placeholder="+7 (___) ___-__-__"
+              className="w-full bg-stone-900 border border-stone-700 focus:border-forest-500 rounded-xl px-4 py-3 text-white placeholder-stone-600 outline-none transition-colors"
+            />
+          </div>
+          <div>
+            <label className="text-stone-400 text-sm mb-2 block">Услуга</label>
+            <select
+              value={service}
+              onChange={e => setService(e.target.value)}
+              className="w-full bg-stone-900 border border-stone-700 focus:border-forest-500 rounded-xl px-4 py-3 text-white outline-none transition-colors"
+            >
+              <option value="">Выберите услугу</option>
+              <option>Валка дерева</option>
+              <option>Опиловка / обрезка</option>
+              <option>Утилизация отходов</option>
+              <option>Корчевание пня</option>
+              <option>Аварийный выезд</option>
+              <option>Расчистка территории</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-stone-400 text-sm mb-2 block">Комментарий</label>
+            <textarea
+              value={comment}
+              onChange={e => setComment(e.target.value)}
+              placeholder="Опишите задачу..."
+              rows={3}
+              className="w-full bg-stone-900 border border-stone-700 focus:border-forest-500 rounded-xl px-4 py-3 text-white placeholder-stone-600 outline-none transition-colors resize-none"
+            />
+          </div>
+          {error && (
+            <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-red-400 text-sm">
+              <Icon name="AlertCircle" size={16} />
+              {error}
+            </div>
+          )}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-forest-500 hover:bg-forest-400 disabled:bg-forest-800 disabled:cursor-not-allowed text-white py-4 rounded-xl font-bold text-lg transition-all hover:shadow-2xl hover:shadow-forest-500/30 flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <><Icon name="Loader" size={20} className="animate-spin" /> Отправляем...</>
+            ) : "Отправить заявку"}
+          </button>
+          <p className="text-stone-600 text-xs text-center">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных</p>
+        </form>
+      )}
+    </div>
+  );
+}
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -593,54 +715,7 @@ export default function Index() {
               </div>
             </div>
 
-            <div className={`bg-stone-950 border border-stone-800 rounded-2xl p-8 ${contactSection.inView ? "animate-fade-in-up" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
-              <h3 className="font-oswald text-2xl font-bold text-white mb-6">ОСТАВИТЬ ЗАЯВКУ</h3>
-              <form className="space-y-4">
-                <div>
-                  <label className="text-stone-400 text-sm mb-2 block">Ваше имя</label>
-                  <input
-                    type="text"
-                    placeholder="Иван Иванов"
-                    className="w-full bg-stone-900 border border-stone-700 focus:border-forest-500 rounded-xl px-4 py-3 text-white placeholder-stone-600 outline-none transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="text-stone-400 text-sm mb-2 block">Телефон</label>
-                  <input
-                    type="tel"
-                    placeholder="+7 (___) ___-__-__"
-                    className="w-full bg-stone-900 border border-stone-700 focus:border-forest-500 rounded-xl px-4 py-3 text-white placeholder-stone-600 outline-none transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="text-stone-400 text-sm mb-2 block">Услуга</label>
-                  <select className="w-full bg-stone-900 border border-stone-700 focus:border-forest-500 rounded-xl px-4 py-3 text-white outline-none transition-colors">
-                    <option value="">Выберите услугу</option>
-                    <option>Валка дерева</option>
-                    <option>Опиловка / обрезка</option>
-                    <option>Утилизация отходов</option>
-                    <option>Корчевание пня</option>
-                    <option>Аварийный выезд</option>
-                    <option>Расчистка территории</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-stone-400 text-sm mb-2 block">Комментарий</label>
-                  <textarea
-                    placeholder="Опишите задачу..."
-                    rows={3}
-                    className="w-full bg-stone-900 border border-stone-700 focus:border-forest-500 rounded-xl px-4 py-3 text-white placeholder-stone-600 outline-none transition-colors resize-none"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-forest-500 hover:bg-forest-400 text-white py-4 rounded-xl font-bold text-lg transition-all hover:shadow-2xl hover:shadow-forest-500/30"
-                >
-                  Отправить заявку
-                </button>
-                <p className="text-stone-600 text-xs text-center">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных</p>
-              </form>
-            </div>
+            <ContactForm inView={contactSection.inView} />
           </div>
         </div>
       </section>
